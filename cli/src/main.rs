@@ -1,6 +1,6 @@
+use ::web_shot::web_shot::Captureshot;
 use anyhow::Result;
 use clap::Parser;
-use web_shot::web_shot;
 
 #[derive(Parser, Debug)]
 #[command(version, about, long_about=None)]
@@ -10,20 +10,29 @@ struct Args {
     url: String,
 
     /// set capture height
-    #[arg(long)]
-    height: Option<u32>,
+    #[arg(long, default_value_t = 1260)]
+    height: u32,
 
     /// set capture width
-    #[arg(long)]
-    width: Option<u32>,
+    #[arg(long, default_value_t = 1080)]
+    width: u32,
+
+    /// output image quality
+    #[arg(short, long, default_value_t = 75)]
+    quality: u32,
 
     /// capture full size page
     #[arg(short, long, default_value_t = false)]
     full: bool,
+
+    /// output file
+    #[arg(short, long, default_value_t = String::from("./screen.png"))]
+    out_file: String,
 }
 
 fn main() -> Result<()> {
     let args = Args::parse();
-    web_shot::shot(&args.url)?;
+    let captureshot = Captureshot::new(args.url, args.width, args.height, args.quality, args.full);
+    captureshot.shot()?.write_to_file(&args.out_file)?;
     Ok(())
 }
