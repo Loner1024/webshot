@@ -1,10 +1,9 @@
-use std::fs;
-
 use anyhow::{anyhow, Result};
 use headless_chrome::{
     browser::default_executable, protocol::cdp::Page::CaptureScreenshotFormatOption, Browser,
     LaunchOptions,
 };
+use tokio::fs;
 
 pub struct Captureshot {
     url: String,
@@ -27,7 +26,7 @@ impl Captureshot {
         }
     }
 
-    pub fn shot(mut self) -> Result<Captureshot> {
+    pub async fn shot(mut self) -> Result<Captureshot> {
         let mut height = self.height;
         let launch_options = LaunchOptions::default_builder()
             .path(Some(default_executable().map_err(|e| anyhow!(e))?))
@@ -65,10 +64,11 @@ impl Captureshot {
         Ok(self)
     }
 
-    pub fn write_to_file(self, filename: &str) -> Result<()> {
+    pub async fn write_to_file(self, filename: &str) -> Result<()> {
         match self.screenshot_bytes {
             Some(data) => {
-                fs::write(filename, data)?;
+                fs::write(filename, data).await?;
+                // fs::write(filename, data)?;
             }
             None => return Err(anyhow!("write to file must after shot page")),
         };

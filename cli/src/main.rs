@@ -30,9 +30,14 @@ struct Args {
     out_file: String,
 }
 
-fn main() -> Result<()> {
+#[tokio::main]
+async fn main() -> Result<()> {
     let args = Args::parse();
     let captureshot = Captureshot::new(args.url, args.width, args.height, args.quality, args.full);
-    captureshot.shot()?.write_to_file(&args.out_file)?;
+    captureshot
+        .shot()
+        .await?
+        .write_to_file(&args.out_file)
+        .await?;
     Ok(())
 }

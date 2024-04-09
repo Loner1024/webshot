@@ -8,3 +8,4 @@ edition = "2021"
 [dependencies]
 anyhow = "1.0.81"
 headless_chrome = { version = "1.0.9", features = ["fetch"] }
+tokio = { version = "1.37.0", features = ["full"] }
