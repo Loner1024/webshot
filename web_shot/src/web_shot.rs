@@ -34,9 +34,9 @@ impl Captureshot {
             .window_size(Some((1260, 1080)))
             .build()?;
         let browser = Browser::new(launch_options)?;
-        let tab = browser.new_tab()?;
-        let result_object = tab.navigate_to(&self.url)?.wait_until_navigated()?.evaluate("Math.max( document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight )", false)?;
         if self.full_page {
+            let tab = browser.new_tab()?;
+            let result_object = tab.navigate_to(&self.url)?.wait_until_navigated()?.evaluate("Math.max( document.body.scrollHeight, document.body.offsetHeight, document.documentElement.clientHeight, document.documentElement.scrollHeight, document.documentElement.offsetHeight )", false)?;
             height = match result_object.value {
                 Some(h) => match h.as_u64() {
                     Some(h) => h as u32,
