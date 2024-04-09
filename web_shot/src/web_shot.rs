@@ -31,7 +31,7 @@ impl Captureshot {
         let mut height = self.height;
         let launch_options = LaunchOptions::default_builder()
             .path(Some(default_executable().map_err(|e| anyhow!(e))?))
-            .window_size(Some((1280, 1080)))
+            .window_size(Some((1260, 1080)))
             .build()?;
         let browser = Browser::new(launch_options)?;
         let tab = browser.new_tab()?;
@@ -40,9 +40,9 @@ impl Captureshot {
             height = match result_object.value {
                 Some(h) => match h.as_u64() {
                     Some(h) => h as u32,
-                    None => 1080,
+                    None => 1280,
                 },
-                None => 1080,
+                None => 1280,
             };
         }
 

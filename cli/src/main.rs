@@ -10,11 +10,11 @@ struct Args {
     url: String,
 
     /// set capture height
-    #[arg(long, default_value_t = 1260)]
+    #[arg(long, default_value_t = 1080)]
     height: u32,
 
     /// set capture width
-    #[arg(long, default_value_t = 1080)]
+    #[arg(long, default_value_t = 1280)]
     width: u32,
 
     /// output image quality
