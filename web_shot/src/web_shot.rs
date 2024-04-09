@@ -1,7 +1,8 @@
 use anyhow::{anyhow, Result};
 use headless_chrome::{
-    browser::default_executable, protocol::cdp::Page::CaptureScreenshotFormatOption, Browser,
-    LaunchOptions,
+    browser::default_executable,
+    protocol::cdp::{Page::CaptureScreenshotFormatOption, Target::CreateTarget},
+    Browser, LaunchOptions,
 };
 use tokio::fs;
 
@@ -45,12 +46,16 @@ impl Captureshot {
             };
         }
 
-        let launch_options = LaunchOptions::default_builder()
-            .path(Some(default_executable().map_err(|e| anyhow!(e))?))
-            .window_size(Some((self.width, height)))
-            .build()?;
-        let browser = Browser::new(launch_options)?;
-        let tab = browser.new_tab()?;
+        let tab = browser.new_tab_with_options(CreateTarget {
+            url: "about:blank".to_string(),
+            width: Some(self.width),
+            height: Some(height),
+            browser_context_id: None,
+            enable_begin_frame_control: None,
+            new_window: Some(true),
+            background: None,
+        })?;
+
         let image_bytes = tab
             .navigate_to(&self.url)?
             .wait_until_navigated()?
@@ -68,7 +73,6 @@ impl Captureshot {
         match self.screenshot_bytes {
             Some(data) => {
                 fs::write(filename, data).await?;
-                // fs::write(filename, data)?;
             }
             None => return Err(anyhow!("write to file must after shot page")),
         };
