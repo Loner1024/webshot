@@ -69,6 +69,13 @@ impl Captureshot {
         Ok(self)
     }
 
+    pub async fn get_bytes(self) -> Result<Vec<u8>> {
+        match self.screenshot_bytes {
+            Some(data) => return Ok(data),
+            None => return Err(anyhow!("get bytes must after shot page")),
+        };
+    }
+
     pub async fn write_to_file(self, filename: &str) -> Result<()> {
         match self.screenshot_bytes {
             Some(data) => {
