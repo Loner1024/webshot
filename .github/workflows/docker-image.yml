@@ -30,10 +30,6 @@ jobs:
           registry: ccr.ccs.tencentyun.com
           username: ${{ secrets.TENCENT_DOCKERHUB_USERNAME }}
           password: ${{ secrets.TENCENT_DOCKERHUB_TOKEN }}
-      - name: ls
-        run: ls -a
-      - name: pwd
-        run: pwd
       - name: Build and push
         uses: docker/build-push-action@v5
         with:

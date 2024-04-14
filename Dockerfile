@@ -27,8 +27,9 @@
 
 # RUN cargo build -p service --release
 
-
 FROM alpine:latest
+
+WORKDIR /home/runner/work/webshot/webshot
 
 COPY target/release/service ./
 
