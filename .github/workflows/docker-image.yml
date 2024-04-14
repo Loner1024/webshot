@@ -17,9 +17,11 @@ jobs:
           fetch-depth: 0
           submodules: recursive
       - name: Install Rust
-        run: rustup toolchain install stable --component llvm-tools-preview
+        run: rustup toolchain install stable
+      - name: Add rust target
+        run: rustup target add aarch64-unknown-linux-musl
       - name: build rust
-        run: cargo build -p service --release
+        run: cargo build -p service --target aarch64-unknown-linux-musl  --release
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
