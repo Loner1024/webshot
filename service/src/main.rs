@@ -20,7 +20,7 @@ const BUCKET_NAME: &str = "web-shot-1255746465";
 async fn main() {
     let app_state = AppState::new();
     let app = Router::new().route("/", get(hello)).with_state(app_state);
-    let listener = tokio::net::TcpListener::bind("0.0.0.0:8080").await.unwrap();
+    let listener = tokio::net::TcpListener::bind("0.0.0.0:9000").await.unwrap();
 
     axum::serve(listener, app).await.unwrap();
 }
