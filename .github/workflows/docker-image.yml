@@ -33,5 +33,6 @@ jobs:
       - name: Build and push
         uses: docker/build-push-action@v5
         with:
+          context: .
           push: true
           tags: test-1024/web_shot/app:latest
