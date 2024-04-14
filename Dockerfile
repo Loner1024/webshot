@@ -29,7 +29,7 @@
 
 FROM alpine:latest
 
-WORKDIR /home/runner/work/webshot/webshot
+# WORKDIR /home/runner/work/webshot/webshot
 
 COPY target/release/service ./
 
