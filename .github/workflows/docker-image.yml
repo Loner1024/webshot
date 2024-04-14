@@ -20,6 +20,8 @@ jobs:
         run: rustup toolchain install stable --component llvm-tools-preview
       - name: build rust
         run: cargo build -p service --release
+      - name: ls
+        run: ls -a
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
