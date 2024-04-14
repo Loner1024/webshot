@@ -22,6 +22,8 @@ jobs:
         run: cargo build -p service --release
       - name: ls
         run: ls -a
+      - name: pwd
+        run: pwd
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
