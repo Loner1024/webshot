@@ -35,4 +35,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ccr.ccs.tencentyun.com/test-1024/web_shot:latest
+          tags: uswccr.ccs.tencentyun.com/uniix/web_shot:latest
