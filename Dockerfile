@@ -35,7 +35,7 @@ RUN apk update
 
 RUN apk add chromium
 
-COPY target/aarch64-unknown-linux-musl/release/service ./
+COPY target/x86_64-unknown-linux-musl/release/service ./
 
 EXPOSE 9000
 
