@@ -21,7 +21,10 @@ jobs:
       - name: Add rust target
         run: rustup target add x86_64-unknown-linux-musl
       - name: Install musl-tools
-        run: apt-get install musl-tools
+        uses: awalsh128/cache-apt-pkgs-action@v1
+        with:
+          packages: musl-tools # provides musl-gcc
+          version: 1.0
       - name: build rust
         run: cargo build -p service --target x86_64-unknown-linux-musl  --release
       - name: Set up QEMU
