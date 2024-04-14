@@ -19,7 +19,7 @@ jobs:
       - name: Install Rust
         run: rustup toolchain install stable
       - name: Add rust target
-        run: rustup target add x86_64-unknown-linux-mus
+        run: rustup target add x86_64-unknown-linux-musl
       - name: Install musl-tools
         run: apt-get install musl-tools
       - name: build rust
