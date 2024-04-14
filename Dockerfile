@@ -27,9 +27,13 @@
 
 # RUN cargo build -p service --release
 
-FROM zenika/alpine-chrome:latest
+FROM alpine:latest
 
 # WORKDIR /home/runner/work/webshot/webshot
+
+RUN apk update
+
+RUN apk add chromium
 
 COPY target/release/service ./
 
