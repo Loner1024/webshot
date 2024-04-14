@@ -30,7 +30,7 @@
 
 FROM alpine:latest
 
-COPY /home/runner/work/webshot/webshot/target/release/service ./
+COPY target/release/service ./
 
 EXPOSE 9000
 
