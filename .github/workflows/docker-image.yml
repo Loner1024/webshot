@@ -6,7 +6,7 @@ on:
     branches:
       - master
 jobs:
-  build-rust:
+  build-rust-and-push-docker-image:
     strategy:
       matrix:
         platform: [ubuntu-latest]
@@ -20,9 +20,6 @@ jobs:
         run: rustup toolchain install stable --component llvm-tools-preview
       - name: build rust
         run: cargo build -p service --release
-  docker:
-    runs-on: ubuntu-latest
-    steps:
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v3
       - name: Set up Docker Buildx
