@@ -27,7 +27,9 @@
 
 # RUN cargo build -p service --release
 
-FROM zenika/alpine-chrome:latest
+FROM selenium/standalone-chrome:latest
+
+USER root
 
 # WORKDIR /home/runner/work/webshot/webshot
 
