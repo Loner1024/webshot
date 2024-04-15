@@ -10,6 +10,7 @@ use axum::{
     Json, Router,
 };
 use serde::{Deserialize, Serialize};
+use tower_http::trace::TraceLayer;
 use uuid::Uuid;
 use validator::Validate;
 use web_shot::web_shot::Captureshot;
@@ -18,8 +19,15 @@ const BUCKET_NAME: &str = "web-shot-1255746465";
 
 #[tokio::main]
 async fn main() {
+    tracing_subscriber::fmt()
+        .with_max_level(tracing::Level::DEBUG)
+        .init();
+
     let app_state = AppState::new();
-    let app = Router::new().route("/", get(hello)).with_state(app_state);
+    let app = Router::new()
+        .route("/", get(hello))
+        .layer(TraceLayer::new_for_http())
+        .with_state(app_state);
     let listener = tokio::net::TcpListener::bind("0.0.0.0:9000").await.unwrap();
 
     axum::serve(listener, app).await.unwrap();
