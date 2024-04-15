@@ -69,7 +69,7 @@ async fn hello(params: Query<Req>, State(state): State<AppState>) -> impl IntoRe
     );
     let s3_url = match shot_and_get_s3url(web_shot, state.s3).await {
         Ok(url) => url,
-        Err(_) => return resp_err("err".to_string()),
+        Err(err) => return resp_err(err.to_string()),
     };
 
     Json(Resp {
