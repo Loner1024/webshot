@@ -12,17 +12,26 @@ pub struct Captureshot {
     height: u32,
     quality: u32,
     full_page: bool,
+    image_format: Option<CaptureScreenshotFormatOption>,
     screenshot_bytes: Option<Vec<u8>>,
 }
 
 impl Captureshot {
-    pub fn new(url: String, width: u32, height: u32, quality: u32, full_page: bool) -> Captureshot {
+    pub fn new(
+        url: String,
+        width: u32,
+        height: u32,
+        quality: u32,
+        full_page: bool,
+        image_format: Option<CaptureScreenshotFormatOption>,
+    ) -> Captureshot {
         Self {
             url,
             width,
             height,
             quality,
             full_page,
+            image_format,
             screenshot_bytes: None,
         }
     }
@@ -56,15 +65,15 @@ impl Captureshot {
             background: None,
         })?;
 
+        let image_format = match self.image_format.clone() {
+            Some(format) => format,
+            None => CaptureScreenshotFormatOption::Png,
+        };
+
         let image_bytes = tab
             .navigate_to(&self.url)?
             .wait_until_navigated()?
-            .capture_screenshot(
-                CaptureScreenshotFormatOption::Png,
-                Some(self.quality),
-                None,
-                true,
-            )?;
+            .capture_screenshot(image_format, Some(self.quality), None, true)?;
         self.screenshot_bytes = Some(image_bytes);
         Ok(self)
     }
