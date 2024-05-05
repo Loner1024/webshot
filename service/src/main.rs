@@ -64,17 +64,24 @@ struct Req {
     #[validate(range(min = 0, max = 100))]
     quality: Option<u32>,
     full_page: Option<bool>,
+    image_format: Option<String>,
 }
 
 async fn hello(params: Query<Req>, State(state): State<AppState>) -> impl IntoResponse {
     let params = params.0;
-    let web_shot = Captureshot::new(
+    let image_format = match params.image_format {
+        Some(format) => format,
+        None => "png".to_string(),
+    };
+    let captureshot = Captureshot::new(
         params.url.clone(),
         params.width.unwrap_or(1280),
         params.height.unwrap_or(1080),
         params.quality.unwrap_or(75),
         params.full_page.unwrap_or(false),
+        image_format.into(),
     );
+    let web_shot = captureshot;
     let s3_url = match shot_and_get_s3url(web_shot, state.s3).await {
         Ok(url) => url,
         Err(err) => return resp_err(err.to_string()),
