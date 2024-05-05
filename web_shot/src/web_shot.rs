@@ -6,13 +6,46 @@ use headless_chrome::{
 };
 use tokio::fs;
 
+#[derive(Clone)]
+pub enum ImageFormat {
+    PNG,
+    JPEG,
+    WEBP,
+}
+
+impl Into<ImageFormat> for String {
+    fn into(self) -> ImageFormat {
+        let format = self.to_lowercase();
+        if format.eq("png") {
+            return ImageFormat::PNG;
+        }
+        if format.eq("jpeg") {
+            return ImageFormat::JPEG;
+        }
+        if format.eq("webp") {
+            return ImageFormat::WEBP;
+        }
+        ImageFormat::PNG
+    }
+}
+
+impl Into<CaptureScreenshotFormatOption> for ImageFormat {
+    fn into(self) -> CaptureScreenshotFormatOption {
+        match self {
+            ImageFormat::PNG => CaptureScreenshotFormatOption::Png,
+            ImageFormat::JPEG => CaptureScreenshotFormatOption::Jpeg,
+            ImageFormat::WEBP => CaptureScreenshotFormatOption::Webp,
+        }
+    }
+}
+
 pub struct Captureshot {
     url: String,
     width: u32,
     height: u32,
     quality: u32,
     full_page: bool,
-    image_format: Option<CaptureScreenshotFormatOption>,
+    image_format: ImageFormat,
     screenshot_bytes: Option<Vec<u8>>,
 }
 
@@ -23,7 +56,7 @@ impl Captureshot {
         height: u32,
         quality: u32,
         full_page: bool,
-        image_format: Option<CaptureScreenshotFormatOption>,
+        image_format: ImageFormat,
     ) -> Captureshot {
         Self {
             url,
@@ -65,15 +98,15 @@ impl Captureshot {
             background: None,
         })?;
 
-        let image_format = match self.image_format.clone() {
-            Some(format) => format,
-            None => CaptureScreenshotFormatOption::Png,
-        };
-
         let image_bytes = tab
             .navigate_to(&self.url)?
             .wait_until_navigated()?
-            .capture_screenshot(image_format, Some(self.quality), None, true)?;
+            .capture_screenshot(
+                self.image_format.clone().into(),
+                Some(self.quality),
+                None,
+                true,
+            )?;
         self.screenshot_bytes = Some(image_bytes);
         Ok(self)
     }
