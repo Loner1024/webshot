@@ -28,12 +28,23 @@ struct Args {
     /// output file
     #[arg(short, long, default_value_t = String::from("./screen.png"))]
     out_file: String,
+
+    /// out file format
+    #[arg(short, long, default_value_t = String::from("png"))]
+    image_format: String,
 }
 
 #[tokio::main]
 async fn main() -> Result<()> {
     let args = Args::parse();
-    let captureshot = Captureshot::new(args.url, args.width, args.height, args.quality, args.full);
+    let captureshot = Captureshot::new(
+        args.url,
+        args.width,
+        args.height,
+        args.quality,
+        args.full,
+        args.image_format.into(),
+    );
     captureshot
         .shot()
         .await?
